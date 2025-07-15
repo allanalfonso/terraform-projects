@@ -34,8 +34,8 @@ resource "google_compute_router" "on-prem-router1" {
 # Configure the VPN Tunnels
 # VPN Tunnels are the Data Plane
 
-resource "google_compute_vpn_tunnel" "vpc-demo-tunnel0" {
-  name                  = "vpc-demo-tunnel0"
+resource "google_compute_vpn_tunnel" "vpc-demo-tunnel1" {
+  name                  = "vpc-demo-tunnel1"
   region                = "us-central1"
   vpn_gateway           = google_compute_ha_vpn_gateway.vpc-demo-vpn-gw1.name
   peer_gcp_gateway      = google_compute_ha_vpn_gateway.on-prem-vpn-gw1.name
@@ -44,8 +44,8 @@ resource "google_compute_vpn_tunnel" "vpc-demo-tunnel0" {
   vpn_gateway_interface = 0
 }
 
-resource "google_compute_vpn_tunnel" "vpc-demo-tunnel1" {
-  name                  = "vpc-demo-tunnel1"
+resource "google_compute_vpn_tunnel" "vpc-demo-tunnel2" {
+  name                  = "vpc-demo-tunnel2"
   region                = "us-central1"
   vpn_gateway           = google_compute_ha_vpn_gateway.vpc-demo-vpn-gw1.name
   peer_gcp_gateway      = google_compute_ha_vpn_gateway.on-prem-vpn-gw1.name
@@ -54,8 +54,8 @@ resource "google_compute_vpn_tunnel" "vpc-demo-tunnel1" {
   vpn_gateway_interface = 1
 }
 
-resource "google_compute_vpn_tunnel" "on-prem-tunnel0" {
-  name                  = "on-prem-tunnel0"
+resource "google_compute_vpn_tunnel" "on-prem-tunnel1" {
+  name                  = "on-prem-tunnel1"
   region                = "us-central1"
   vpn_gateway           = google_compute_ha_vpn_gateway.on-prem-vpn-gw1.name
   peer_gcp_gateway      = google_compute_ha_vpn_gateway.vpc-demo-vpn-gw1.name
@@ -64,8 +64,8 @@ resource "google_compute_vpn_tunnel" "on-prem-tunnel0" {
   vpn_gateway_interface = 0
 }
 
-resource "google_compute_vpn_tunnel" "on-prem-tunnel1" {
-  name                  = "on-prem-tunnel1"
+resource "google_compute_vpn_tunnel" "on-prem-tunnel2" {
+  name                  = "on-prem-tunnel2"
   region                = "us-central1"
   vpn_gateway           = google_compute_ha_vpn_gateway.on-prem-vpn-gw1.name
   peer_gcp_gateway      = google_compute_ha_vpn_gateway.vpc-demo-vpn-gw1.name
@@ -81,11 +81,11 @@ resource "google_compute_router_interface" "vpc-demo-router1_interface1" {
   router     = google_compute_router.vpc-demo-router1.name
   region     = "us-central1"
   ip_range   = "169.254.0.1/30"
-  vpn_tunnel = google_compute_vpn_tunnel.vpc-demo-tunnel0.name
+  vpn_tunnel = google_compute_vpn_tunnel.vpc-demo-tunnel1.name
 }
 
 resource "google_compute_router_peer" "router1_peer1" {
-  name                      = "vpc-demorouter1-peer1"
+  name                      = "vpc-demo-router1-peer1"
   router                    = google_compute_router.vpc-demo-router1.name
   region                    = "us-central1"
   peer_ip_address           = "169.254.0.2"
@@ -99,7 +99,7 @@ resource "google_compute_router_interface" "vpc-demo-router1_interface2" {
   router     = google_compute_router.vpc-demo-router1.name
   region     = "us-central1"
   ip_range   = "169.254.1.2/30"
-  vpn_tunnel = google_compute_vpn_tunnel.vpc-demo-tunnel1.name
+  vpn_tunnel = google_compute_vpn_tunnel.vpc-demo-tunnel2.name
 }
 
 resource "google_compute_router_peer" "vpc-demo-router1_peer2" {
@@ -117,7 +117,7 @@ resource "google_compute_router_interface" "on-prem-router2_interface1" {
   router     = google_compute_router.on-prem-router1.name
   region     = "us-central1"
   ip_range   = "169.254.0.2/30"
-  vpn_tunnel = google_compute_vpn_tunnel.on-prem-tunnel0.name
+  vpn_tunnel = google_compute_vpn_tunnel.on-prem-tunnel1.name
 }
 
 resource "google_compute_router_peer" "router2_peer1" {
@@ -135,7 +135,7 @@ resource "google_compute_router_interface" "on-prem-router2_interface2" {
   router     = google_compute_router.on-prem-router1.name
   region     = "us-central1"
   ip_range   = "169.254.1.1/30"
-  vpn_tunnel = google_compute_vpn_tunnel.on-prem-tunnel1.name
+  vpn_tunnel = google_compute_vpn_tunnel.on-prem-tunnel2.name
 }
 
 resource "google_compute_router_peer" "router2_peer2" {
