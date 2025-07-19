@@ -14,12 +14,12 @@ This directory contains Terraform code to deploy a highly available (HA) VPN bet
 
 ## File Structure
 
-- [`gcp.tf`](ha-vpn/gcp.tf): Defines the `vpc-demo` VPC, subnets, firewall rules, and test VMs.
-- [`onprem.tf`](ha-vpn/onprem.tf): Defines the `on-prem` VPC, subnets, firewall rules, and test VMs.
-- [`ha-vpn.tf`](~/ha-vpn/ha-vpn.tf): Configures HA VPN gateways, VPN tunnels, Cloud Routers, BGP interfaces, and peers.
-- [`variables.tf`](ha-vpn/variables.tf): Input variables for project, region, and zone.
-- [`providers.tf`](ha-vpn/providers.tf): Provider configuration.
-- [`versions.tf`](ha-vpn/versions.tf): Terraform version constraint.
+- [`gcp.tf`](gcp.tf): Defines the `vpc-demo` VPC, subnets, firewall rules, and test VMs.
+- [`onprem.tf`](onprem.tf): Defines the `on-prem` VPC, subnets, firewall rules, and test VMs.
+- [`ha-vpn.tf`](ha-vpn.tf): Configures HA VPN gateways, VPN tunnels, Cloud Routers, BGP interfaces, and peers.
+- [`variables.tf`](variables.tf): Input variables for project, region, and zone.
+- [`providers.tf`](providers.tf): Provider configuration.
+- [`versions.tf`](versions.tf): Terraform version constraint.
 
 ## Usage
 
