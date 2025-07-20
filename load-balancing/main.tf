@@ -387,10 +387,8 @@ resource "google_compute_backend_service" "http_backend" { # Renamed resource
   # Reference the health check for the backend service
   health_checks = [google_compute_health_check.http_health_check.id]
 
-  # Explicitly depend on the Health Check and Managed Instance Groups
-  # This ensures the health check is fully ready and MIGs' named ports are propagated
+  # Explicitly depend on the Managed Instance Groups
   depends_on = [
-    google_compute_health_check.http_health_check, # Explicit dependency on the health check
     google_compute_instance_group_manager.us_1_mig,
     google_compute_instance_group_manager.notus_1_mig,
   ]
