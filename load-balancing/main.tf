@@ -320,10 +320,6 @@ resource "google_compute_autoscaler" "us_1_autoscaler" {
     #   target = 0.6
     # }
   }
-  # Explicit dependency on the health check to ensure it is created before the autoscaler
-  depends_on = [
-    google_compute_health_check.http_health_check # Explicit dependency on the health check
-  ]
 }
 
 # Define the second Managed Instance Group (MIG)
@@ -368,10 +364,6 @@ resource "google_compute_autoscaler" "notus_1_autoscaler" {
       target = 0.8 # 80% utilization
     }
   }
-  # Explicit dependency on the health check to ensure it is created before the autoscaler
-  depends_on = [
-    google_compute_health_check.http_health_check # Explicit dependency on the health check
-  ]
 }
 
 
@@ -380,18 +372,19 @@ resource "google_compute_autoscaler" "notus_1_autoscaler" {
 # Define the Backend Service for the Managed Instance Group
 resource "google_compute_backend_service" "http_backend" { # Renamed resource
   name        = "http-backend"                             # New name for the backend service
+
+  # Explicitly depend on the MIGs. While the `backend` block creates an
+  # implicit dependency, this can help prevent a race condition where the
+  # backend service attempts to use the health check before it's fully
+  # provisioned and associated with the MIGs.
+  depends_on = [google_compute_instance_group_manager.us_1_mig, google_compute_instance_group_manager.notus_1_mig]
+
   protocol    = "HTTP"                                     # The protocol used to communicate with the backends
   timeout_sec = 10                                         # How long to wait for a response from the backend
   port_name   = "http"
 
   # Reference the health check for the backend service
   health_checks = [google_compute_health_check.http_health_check.id]
-
-  # Explicitly depend on the Managed Instance Groups
-  depends_on = [
-    google_compute_instance_group_manager.us_1_mig,
-    google_compute_instance_group_manager.notus_1_mig,
-  ]
 
   # Add the managed instance group as a backend
   backend {
